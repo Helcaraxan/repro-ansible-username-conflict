@@ -1,0 +1,16 @@
+---
+- hosts: all
+  vars:
+    target_user: "foo"
+
+  tasks:
+    - name: Setup '{{ target_user }}' user
+      become: yes
+      user:
+        name: "{{ target_user }}"
+
+    - name: Create example.txt file
+      become: yes
+      become_user: "{{ target_user }}"
+      command: touch "$HOME/example.txt"
+      ignore_errors: yes

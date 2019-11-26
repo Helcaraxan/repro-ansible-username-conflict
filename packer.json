@@ -1,0 +1,30 @@
+{
+    "builders": [
+        {
+            "type": "googlecompute",
+            "project_id": "{{user `project_id`}}",
+            "zone": "{{user `zone`}}",
+            "instance_name": "packer-{{uuid}}",
+            "machine_type": "n1-standard-1",
+            "preemptible": true,
+            "source_image_family": "ubuntu-1804-lts",
+            "communicator": "ssh",
+            "ssh_username": "{{user `packer_user`}}"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "ansible",
+            "ansible_env_vars": [
+                "ANSIBLE_DIFF_ALWAYS=1",
+                "ANSIBLE_FORCE_COLOR=1"
+            ],
+            "extra_arguments": [
+                "-vvv",
+                "--extra-vars",
+                "target_user={{user `target_user`}}"
+            ],
+            "playbook_file": "ansible/playbook.yaml"
+        }
+    ]
+}
